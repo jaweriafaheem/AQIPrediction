@@ -148,6 +148,15 @@ def fetch_data():
 
 def upload_to_hopsworks(df):
     try:
+        import os
+        if os.path.exists(".env"):
+            with open(".env", "r") as f:
+                for line in f:
+                    if "=" in line:
+                        k, v = line.strip().split("=", 1)
+                        if v.startswith('"') or v.startswith("'"):
+                            v = v[1:-1]
+                        os.environ[k] = v
         import hopsworks
         print("\nConnecting to Hopsworks...")
         project = hopsworks.login()
